@@ -35,17 +35,17 @@ class BookRead
     private ?string $cover = null;
 
     #[ORM\Column]
-    private ?\DateTime $created_at = null;
+    private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column]
-    private ?\DateTime $updated_at = null;
+    private ?\DateTimeInterface $updated_at = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUser(): ?int
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -57,12 +57,12 @@ class BookRead
         return $this;
     }
 
-    public function getBook(): ?string
+    public function getBook(): ?Book
     {
         return $this->book;
     }
 
-    public function setBook(string $book): static
+    public function setBook(Book $book): static
     {
         $this->book = $book;
 
@@ -117,24 +117,24 @@ class BookRead
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTime $created_at): static
+    public function setCreatedAt(\DateTimeInterface $created_at): static
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTime $updated_at): static
+    public function setUpdatedAt(\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
 

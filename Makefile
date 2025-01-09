@@ -15,6 +15,7 @@ run:
 	$(DOCKER_COMPOSE) run --rm php sh -c "./wait-for-it.sh -t 30 database:5432"
 	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console doctrine:migrations:migrate --no-interaction
 	$(DOCKER_COMPOSE) up --remove-orphans -d
+	make fixtures
 
 fixtures:
 	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console doctrine:fixtures:load --no-interaction

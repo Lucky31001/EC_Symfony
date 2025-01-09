@@ -34,4 +34,10 @@ class BookReadRepository extends ServiceEntityRepository
             ->getResult();
 
     }
+
+    public function save(BookRead $bookRead): void
+    {
+        $this->_em->persist($bookRead);
+        $this->_em->flush();
+    }
 }
