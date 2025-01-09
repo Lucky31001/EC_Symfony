@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BookReadRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: BookReadRepository::class)]
 class BookRead
@@ -49,7 +50,7 @@ class BookRead
         return $this->user;
     }
 
-    public function setUser(int $user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
