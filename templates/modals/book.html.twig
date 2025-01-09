@@ -60,35 +60,40 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('bookReadForm');
-        form.addEventListener('submit', function (event) {
-            // event.preventDefault();
-            //
-            // const formData = new FormData(form);
-            // const jsonData = {};
-            // formData.forEach((value, key) => {
-            //     jsonData[key] = value;
-            // });
-            //
-            // console.log(jsonData);
-            // const xhr = new XMLHttpRequest();
-            // xhr.open('POST', form.action, true);
-            // xhr.setRequestHeader('Content-Type', 'application/json');
-            //
-            // xhr.onload = function () {
-            //     if (xhr.status >= 200 && xhr.status < 300) {
-            //         const response = JSON.parse(xhr.responseText);
-            //         alert(response.message);
-            //     } else {
-            //         const response = JSON.parse(xhr.responseText);
-            //         alert('An error occurred: ' + response.error);
-            //     }
-            // };
-            //
-            // xhr.onerror = function () {
-            //     alert('An error occurred during the request.');
-            // };
-            //
-            // xhr.send(JSON.stringify(jsonData));
-        });
+        if (form) {
+            form.addEventListener('submit', function (event) {
+                console.log('Form submitted');
+                // event.preventDefault();
+                //
+                // const formData = new FormData(form);
+                // const jsonData = {};
+                // formData.forEach((value, key) => {
+                //     jsonData[key] = value;
+                // });
+                //
+                // console.log(jsonData);
+                // const xhr = new XMLHttpRequest();
+                // xhr.open('POST', form.action, true);
+                // xhr.setRequestHeader('Content-Type', 'application/json');
+                //
+                // xhr.onload = function () {
+                //     if (xhr.status >= 200 && xhr.status < 300) {
+                //         const response = JSON.parse(xhr.responseText);
+                //         alert(response.message);
+                //     } else {
+                //         const response = JSON.parse(xhr.responseText);
+                //         alert('An error occurred: ' + response.error);
+                //     }
+                // };
+                //
+                // xhr.onerror = function () {
+                //     alert('An error occurred during the request.');
+                // };
+                //
+                // xhr.send(JSON.stringify(jsonData));
+            });
+        } else {
+            console.error('Form not found');
+        }
     });
 </script>
