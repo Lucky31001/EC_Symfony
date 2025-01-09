@@ -1,69 +1,57 @@
-# Variables
-DOCKER_COMPOSE=docker compose
-PHP_CONTAINER=php
-DB_CONTAINER=db
-PROJECT_DIR=app
+# Définir les variables de l'environnement
+PHP=php
+DOCTRINE=php bin/console doctrine
+SYMFONY_SERVER=symfony server:start --daemon
+XAMPP_CMD=sudo /Applications/XAMPP/xamppfiles/xampp
+COMPOSER=composer
 
-install:
-	$(DOCKER_COMPOSE) build
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) composer install
+# Nom de la base de données
+DATABASE_NAME=symfony_db
 
-# Commandes Docker
-run:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) composer install
-	$(DOCKER_COMPOSE) run --rm php bin/console doctrine:database:create ||true
-	$(DOCKER_COMPOSE) run --rm php sh -c "./wait-for-it.sh -t 30 database:5432"
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console doctrine:migrations:migrate --no-interaction
-	$(DOCKER_COMPOSE) up --remove-orphans -d
-	make fixtures
+# Commande pour lancer XAMPP (Apache et MySQL)
+start-xampp:
+	@echo "Démarrage de XAMPP..."
+	$(XAMPP_CMD) startapache
+	$(XAMPP_CMD) startmysql
 
+drop-db:
+	@echo "Suppression de la base de données..."
+	$(DOCTRINE):database:drop --force || true
+
+# Commande pour créer la base de données
+create-db:
+	@echo "Création de la base de données..."
+	$(DOCTRINE):database:create
+
+# Commande pour créer le schéma de la base de données (tables)
+migrate-db:
+	@echo "Création des tables dans la base de données..."
+	$(DOCTRINE):schema:create
+
+# Commande pour installer les dépendances avec Composer
+install-composer-deps:
+	@echo "Installation des dépendances Composer..."
+	$(COMPOSER) install --no-interaction
+
+# Commande pour injecter les fixtures (si vous en avez)
 fixtures:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console doctrine:fixtures:load --no-interaction
+	@echo "Injection des fixtures dans la base de données..."
+	$(DOCTRINE):fixtures:load --no-interaction
 
+# Commande pour démarrer le serveur Symfony
+start-server:
+	@echo "Démarrage du serveur Symfony..."
+	$(SYMFONY_SERVER)
+
+# Commande pour créer une nouvelle migration basée sur les changements dans les entités
 migration:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console doctrine:migrations:diff
+	@echo "Création de la migration..."
+	$(DOCTRINE):migrations:diff
 
+# Commande pour appliquer les migrations non exécutées dans la base de données
 migrate:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console doctrine:migrations:migrate --no-interaction
+	@echo "Application des nouvelles migrations..."
+	$(DOCTRINE):migrations:migrate --no-interaction
 
-down:
-	$(DOCKER_COMPOSE) down -v
-
-stop:
-	$(DOCKER_COMPOSE) stop
-
-# Connexion au conteneur PHP
-cli:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash
-
-# Commandes Symfony
-sf:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console $(cmd)
-
-logs:
-	$(DOCKER_COMPOSE) logs -f
-
-version:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php bin/console about
-
-prettier:
-	docker run -v ${PWD}:/code ghcr.io/php-cs-fixer/php-cs-fixer:3.48-php8.2 fix -- ./src
-	docker run -v ${PWD}:/code ghcr.io/php-cs-fixer/php-cs-fixer:3.48-php8.2 fix -- ./templates
-
-ps:
-	$(DOCKER_COMPOSE) ps
-
-restart:
-	$(DOCKER_COMPOSE) restart
-
-sniff:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcs --standard=PSR12 src
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcs --standard=PSR12 templates
-
-correct:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcbf --standard=PSR12 src
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcbf --standard=PSR12 templates
-
-correct_all:
-	make prettier
-	make correct
+# Commande combinée pour lancer XAMPP, créer la base de données, créer les tables, injecter les fixtures et démarrer le serveur Symfony
+run: start-xampp install-composer-deps drop-db create-db migrate-db fixtures start-server
