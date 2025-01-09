@@ -32,12 +32,15 @@ class HomeController extends AbstractController
         }
         $userId     = $user->getId();
         $user = $this->userRepository->find($userId);
-        $booksRead  = $this->bookReadRepository->findAllByUserId($user, true);
+
+        $booksRead  = $this->bookReadRepository->findAllDetailsByUserId($user);
+        $booksReading = $this->bookReadRepository->findAllByUserId($user, false);
         $books = $this->bookRepository->findAll();
-        // Render the 'hello.html.twig' template
+
         return $this->render('pages/home.html.twig', [
             'books'     => $books,
             'booksRead' => $booksRead,
+            'booksReading' => $booksReading,
             'name'      => 'Accueil',
             'user'      => $user->getUserIdentifier()
         ]);

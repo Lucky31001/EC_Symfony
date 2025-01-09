@@ -18,21 +18,32 @@ class BookReadRepository extends ServiceEntityRepository
         parent::__construct($registry, BookRead::class);
     }
 
-    /**
-     * Method to find all ReadBook entities by user_id
-     * @param User $user
-     * @param bool $readState
-     * @return array
-     */
-    public function findAllByUserId(User $user, bool $readState): array
+
+    public function findAllDetailsByUserId(User $user): array
     {
-        return $this->createQueryBuilder('b')
-            ->where('b.user = :user')
-            ->andWhere('b.is_read = :read')
+        return $this->createQueryBuilder('br')
+            ->select('b.id AS ID, b.name AS bookName, br.description, c.name AS categoryName, br.rating')
+            ->join('br.book', 'b')
+            ->join('b.category', 'c')
+            ->where('br.user = :user')
+            ->andWhere('br.is_read = true')
             ->setParameter('user', $user)
-            ->setParameter('read', $readState)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findAllByUserId(User $user): array
+    {
+        return $this->createQueryBuilder('br')
+            ->select('b.id AS ID, b.name AS bookName, br.description, c.name AS categoryName, br.rating, br.updated_at as updatedAt')
+            ->join('br.book', 'b')
+            ->join('b.category', 'c')
+            ->where('br.user = :user')
+            ->andWhere('br.is_read = false')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+
     }
 
     public function save(BookRead $bookRead): void
