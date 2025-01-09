@@ -6,9 +6,10 @@ use App\Entity\BookRead;
 use App\Repository\BookReadRepository;
 use App\Repository\BookRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,24 +20,28 @@ class BookController extends AbstractController
     public function __construct(private BookRepository $bookRepository,
                                 private UserRepository $userRepository,
                                 private Security $security,
-                                private BookReadRepository $bookReadRepository)
+                                private BookReadRepository $bookReadRepository,
+                                private LoggerInterface $logger,)
     {
     }
 
     #[Route('/book/read', name: 'book_read', methods: ['POST'])]
-    public function saveBookRead(Request $request, LoggerInterface $logger): Response
+    public function saveBookRead(Request $request, LoggerInterface $logger): JsonResponse
     {
         $user = $this->security->getUser();
 
-        $bookId = $request->request->get('book');
-        $rating = $request->request->get('rating');
-        $description = $request->request->get('description');
-        $isRead = $request->request->get('check') ? true : false;
+        $data = json_decode($request->getContent(), true);
+
+        $bookId = $data['book'];
+        $rating = $data['rating'];
+        $description = $data['description'];
+        $isRead = $data['is_read'];
 
         $book = $this->bookRepository->find($bookId);
+
         if (!$book) {
-            $logger->error('Book not found');
-            return new Response('Book not found', 404);
+            $this->logger->error('Book not found');
+            return new JsonResponse(['message' => 'Book not found'], 404);
         }
 
         $user = $this->userRepository->find($user->getId());
@@ -47,16 +52,18 @@ class BookController extends AbstractController
         $bookRead->setRating($rating);
         $bookRead->setDescription($description);
         $bookRead->setRead($isRead);
-        $bookRead->setCreatedAt(new \DateTime());
-        $bookRead->setUpdatedAt(new \DateTime());
+        $bookRead->setCreatedAt(new DateTime());
+        $bookRead->setUpdatedAt(new DateTime());
 
         try {
             $this->bookReadRepository->save($bookRead);
         } catch (\Exception $e) {
-            $logger->error('Database error: ' . $e->getMessage());
-            return new Response('Database error', 500);
+            $this->logger->error('Database error: ' . $e->getMessage());
+            return new JsonResponse(['message' => 'Database error'], 500);
         }
-
-        return new Response('Book read saved successfully');
+        return $this->json([
+            'message' => 'Book read saved successfully',
+            'bookRead' => $bookRead
+        ], Response::HTTP_CREATED);
     }
 }

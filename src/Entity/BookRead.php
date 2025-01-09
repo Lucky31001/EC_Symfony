@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BookReadRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,7 +16,7 @@ class BookRead
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Book::class)]
@@ -35,10 +36,10 @@ class BookRead
     private ?string $cover = null;
 
     #[ORM\Column]
-    private ?\DateTimeInterface $created_at = null;
+    private ?DateTime $created_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeInterface $updated_at = null;
+    private ?DateTime $updated_at = null;
 
     public function getId(): ?int
     {
@@ -117,24 +118,24 @@ class BookRead
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): static
+    public function setCreatedAt(DateTime $created_at): static
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): DateTime
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updated_at): static
+    public function setUpdatedAt(DateTime $updated_at): static
     {
         $this->updated_at = $updated_at;
 

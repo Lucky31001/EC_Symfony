@@ -40,10 +40,10 @@
                             </select>
                         </div>
 
-                        <div class="flex flex-col gap-1">
+                        <div class="flex gap-1">
                             <label class="switch">
                                 <span class="switch-label font-normal text-gray-900">Lecture terminée</span>
-                                <input name="check" type="checkbox" value="1"/>
+                                <input name="is_read" type="checkbox" value="1"/>
                             </label>
                         </div>
 
@@ -60,37 +60,49 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('bookReadForm');
+        const isReadCheckbox = form.querySelector('input[name="is_read"]');
+        const modal = document.getElementById('book_modal');
+
         if (form) {
+            isReadCheckbox.addEventListener('change', function () {
+                isReadCheckbox.value = isReadCheckbox.checked ? 1 : 0;
+            });
+
             form.addEventListener('submit', function (event) {
-                console.log('Form submitted');
-                // event.preventDefault();
-                //
-                // const formData = new FormData(form);
-                // const jsonData = {};
-                // formData.forEach((value, key) => {
-                //     jsonData[key] = value;
-                // });
-                //
-                // console.log(jsonData);
-                // const xhr = new XMLHttpRequest();
-                // xhr.open('POST', form.action, true);
-                // xhr.setRequestHeader('Content-Type', 'application/json');
-                //
-                // xhr.onload = function () {
-                //     if (xhr.status >= 200 && xhr.status < 300) {
-                //         const response = JSON.parse(xhr.responseText);
-                //         alert(response.message);
-                //     } else {
-                //         const response = JSON.parse(xhr.responseText);
-                //         alert('An error occurred: ' + response.error);
-                //     }
-                // };
-                //
-                // xhr.onerror = function () {
-                //     alert('An error occurred during the request.');
-                // };
-                //
-                // xhr.send(JSON.stringify(jsonData));
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const jsonData = {};
+                formData.forEach((value, key) => {
+                    jsonData[key] = value;
+                });
+
+                jsonData['is_read'] = isReadCheckbox.checked;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/book/read', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        form.reset();
+                        document.querySelector('[data-modal-toggle="#book_modal"]').click();
+                    } else {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            alert('An error occurred: ' + response.error);
+                        } catch (e) {
+                            console.error('Error parsing JSON:', e);
+                            alert('An error occurred while processing the response.');
+                        }
+                    }
+                };
+
+                xhr.onerror = function () {
+                    alert('An error occurred during the request.');
+                };
+
+                xhr.send(JSON.stringify(jsonData));
             });
         } else {
             console.error('Form not found');

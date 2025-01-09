@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\BookRead;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -12,14 +13,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BookReadRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, BookRead::class);
     }
 
     /**
      * Method to find all ReadBook entities by user_id
-     * @param int $userId
+     * @param User $user
      * @param bool $readState
      * @return array
      */
@@ -32,12 +33,11 @@ class BookReadRepository extends ServiceEntityRepository
             ->setParameter('read', $readState)
             ->getQuery()
             ->getResult();
-
     }
 
     public function save(BookRead $bookRead): void
     {
-        $this->_em->persist($bookRead);
-        $this->_em->flush();
+        $this->entityManager->persist($bookRead);
+        $this->entityManager->flush();
     }
 }
