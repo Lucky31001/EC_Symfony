@@ -2,6 +2,7 @@
 PHP=php
 DOCTRINE=php bin/console doctrine
 SYMFONY_SERVER=symfony server:start --daemon
+SYNFONY_SERVER_STATUS=symfony server:status
 XAMPP_CMD=sudo /Applications/XAMPP/xamppfiles/xampp
 COMPOSER=composer
 

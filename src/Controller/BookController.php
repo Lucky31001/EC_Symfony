@@ -50,7 +50,6 @@ class BookController extends AbstractController
         $bookRead->setCreatedAt(new \DateTime());
         $bookRead->setUpdatedAt(new \DateTime());
 
-        dump($bookRead);
         try {
             $this->bookReadRepository->save($bookRead);
         } catch (\Exception $e) {
