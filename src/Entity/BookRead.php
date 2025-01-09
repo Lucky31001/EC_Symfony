@@ -14,11 +14,12 @@ class BookRead
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\OneToOne(targetEntity: User::class)]
+    private ?User $user = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $book_id = null;
+    #[ORM\ManyToOne(targetEntity: Book::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Book $book = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
     private ?string $rating = null;
@@ -43,26 +44,26 @@ class BookRead
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getUser(): ?int
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(int $user_id): static
+    public function setUser(int $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getBookId(): ?string
+    public function getBook(): ?string
     {
-        return $this->book_id;
+        return $this->book;
     }
 
-    public function setBookId(string $book_id): static
+    public function setBook(string $book): static
     {
-        $this->book_id = $book_id;
+        $this->book = $book;
 
         return $this;
     }

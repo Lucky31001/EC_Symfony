@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\BookRead;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,15 +23,15 @@ class BookReadRepository extends ServiceEntityRepository
      * @param bool $readState
      * @return array
      */
-    public function findByUserId(int $userId, bool $readState): array
+    public function findAllByUserId(User $user, bool $readState): array
     {
-        return $this->createQueryBuilder('r')
-            ->where('r.user_id = :userId')
-            ->andWhere('r.is_read = :isRead')
-            ->setParameter('userId', $userId)
-            ->setParameter('isRead', $readState)
-            ->orderBy('r.created_at', 'DESC')
+        return $this->createQueryBuilder('b')
+            ->where('b.user = :user')
+            ->andWhere('b.is_read = :read')
+            ->setParameter('user', $user)
+            ->setParameter('read', $readState)
             ->getQuery()
             ->getResult();
+
     }
 }
