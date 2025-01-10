@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -24,6 +25,7 @@ class BookFixture extends Fixture implements DependentFixtureInterface
             $book->setCreatedAt($now);
             $book->setUpdatedAt($now);
 
+            $this->addReference('book_' . $enum, $book);
             $manager->persist($book);
         }
 
@@ -34,6 +36,7 @@ class BookFixture extends Fixture implements DependentFixtureInterface
     {
         return [
             CategoryFixture::class,
+            UserFixture::class
         ];
     }
 }

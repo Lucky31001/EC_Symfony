@@ -6,6 +6,7 @@ use App\DataFixtures\CategoryFixture;
 use App\Repository\BookReadRepository;
 use App\Repository\BookRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\LikeRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -18,10 +19,10 @@ class HomeController extends AbstractController
     private BookReadRepository $readBookRepository;
 
     // Inject the repository via the constructor
-    public function __construct(private BookReadRepository $bookReadRepository,
-                                private Security           $security,
-                                private BookRepository     $bookRepository,
-                                private UserRepository     $userRepository,
+    public function __construct(private BookReadRepository      $bookReadRepository,
+                                private Security                $security,
+                                private BookRepository          $bookRepository,
+                                private UserRepository          $userRepository,
                                 private readonly CategoryRepository $categoryRepository)
     {
     }
