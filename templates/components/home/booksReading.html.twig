@@ -36,9 +36,14 @@
                         <tr>
                             <td>
                                 <div class="flex flex-col gap-2">
-                                    <a class="leading-none font-medium text-sm text-gray-900 hover:text-primary" data-modal-toggle="#book_modal"
+                                    <a class="leading-none font-medium text-sm text-gray-900 hover:text-primary"
                                        href="#"
-                                        data-id="{{ bookReading.ID }}">
+                                       data-modal-toggle="#book_modal"
+                                       data-id="{{ bookReading.ID }}"
+                                       data-book="{{ bookReading.bookName }}"
+                                       data-description="{{ bookReading.description }}"
+                                       data-rating="{{ bookReading.rating }}"
+                                       data-checked="{{ bookReading.is_read }}">
                                         {{ bookReading.bookName }}
                                     </a>
                                     <span class="text-2sm text-gray-700 font-normal leading-3">

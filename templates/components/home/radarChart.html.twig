@@ -15,8 +15,6 @@
     var data = {{ radarData|raw }};
     const count = data.map((item) => (item.book_read_count));
     const categories = data.map((item) => (item.category_name));
-    console.log(count);
-    console.log(categories);
     var options = {
         series: [{
             name: 'Nombre de livre lu',

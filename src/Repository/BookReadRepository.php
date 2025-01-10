@@ -22,7 +22,7 @@ class BookReadRepository extends ServiceEntityRepository
     public function findAllDetailsByUserId(User $user): array
     {
         return $this->createQueryBuilder('br')
-            ->select('b.id AS ID, b.name AS bookName, br.description, c.name AS categoryName, br.rating')
+            ->select('b.id AS ID, b.name AS bookName, br.description, br.is_read, c.name AS categoryName, br.rating')
             ->join('br.book', 'b')
             ->join('b.category', 'c')
             ->where('br.user = :user')
@@ -35,7 +35,7 @@ class BookReadRepository extends ServiceEntityRepository
     public function findAllByUserId(User $user): array
     {
         return $this->createQueryBuilder('br')
-            ->select('b.id AS ID, b.name AS bookName, br.description, c.name AS categoryName, br.rating, br.updated_at as updatedAt')
+            ->select('b.id AS ID, b.name AS bookName, br.description, br.is_read, c.name AS categoryName, br.rating, br.updated_at as updatedAt')
             ->join('br.book', 'b')
             ->join('b.category', 'c')
             ->where('br.user = :user')
