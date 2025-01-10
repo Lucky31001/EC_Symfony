@@ -37,10 +37,10 @@
                     </thead>
                     <tbody>
                     {% for book in booksRead %}
-                        <tr>
+                        <tr class="book-row">
                             <td>
                                 <div class="flex flex-col gap-2">
-                                    <a class="leading-none font-medium text-sm text-gray-900 hover:text-primary" href="#">
+                                    <a class="leading-none font-medium text-sm text-gray-900 hover:text-primary" href="#" data-modal-toggle="#book_modal">
                                         {{ book.bookName }}
                                     </a>
                                     <span class="text-2sm text-gray-700 font-normal leading-3">
@@ -89,3 +89,12 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.book-row').forEach(row => {
+            row.addEventListener('click', function () {
+                document.querySelector('[data-modal-toggle="#book_modal"]').click();
+            });
+        });
+    });
+</script>
