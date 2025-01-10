@@ -48,6 +48,7 @@ class BookController extends AbstractController
 
         $bookRead = $this->bookReadRepository->findOneBy(['user' => $user, 'book' => $book]);
 
+        $asChangeRead = false;
         $gonnaUpdate = false;
         if (!$bookRead) {
             $gonnaUpdate = true;
@@ -55,6 +56,8 @@ class BookController extends AbstractController
             $bookRead->setUser($user);
             $bookRead->setBook($book);
             $bookRead->setCreatedAt(new DateTime());
+        } elseif ($bookRead->isRead() !== $isRead) {
+            $asChangeRead = true;
         }
 
         $bookRead->setRating($rating);
@@ -81,13 +84,14 @@ class BookController extends AbstractController
             'rating' => $bookRead->getRating(),
             'is_read' => $bookRead->isRead(),
             'category' => $category[0],
-            'description' => $bookRead->getDescription(),
+            'description' => $book->getDescription(),
             'updated_at' => (new DateTime())->format('Y-m-d H:i:s'),
         ];
 
         return $this->json([
             'message' => 'Book read saved successfully',
             'methode' => $gonnaUpdate ? 'create' : 'update',
+            'as_change_read' => $asChangeRead,
             'bookRead' => $bookRead
         ], Response::HTTP_CREATED);
     }
