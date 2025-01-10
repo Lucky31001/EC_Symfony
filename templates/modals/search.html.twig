@@ -1,63 +1,120 @@
 <div class="modal" data-modal="true" id="search_modal">
     <div class="modal-content max-w-[600px] top-[15%]">
         <div class="modal-header py-4 px-5">
-            <i class="ki-filled ki-magnifier text-gray-700 text-xl">
-            </i>
+            <i class="ki-filled ki-magnifier text-gray-700 text-xl"></i>
             <input class="input px-0 border-none bg-transparent shadow-none ms-2.5" name="query"
                    placeholder="Rechercher..." type="text" value=""/>
             <button class="btn btn-sm btn-icon btn-light btn-clear shrink-0" data-modal-dismiss="true">
-                <i class="ki-filled ki-cross">
-                </i>
+                <i class="ki-filled ki-cross"></i>
             </button>
         </div>
         <div class="modal-body p-0 pb-5">
-            <div class="scrollable-y-auto" data-scrollable="true" data-scrollable-max-height="auto"
-                 data-scrollable-offset="300px">
-                <div class="menu menu-default p-0 flex-col">
-                    <div class="grid gap-1">
-                        <div class="menu-item">
-                            <div class="menu-link flex justify-between gap-2">
-                                <div class="flex items-center gap-2.5">
-                                    <img alt="Cover" class="rounded-full size-9 shrink-0" src="" />
-                                    <div class="flex flex-col">
-                                        <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px"
-                                           href="#">
-                                            Le Moine qui vendit sa Ferrari
-                                        </a>
-                                        <span class="text-2sm font-normal text-gray-500">
-                                            Un conte sur la quête du bonheur et du succès intérieur.
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-2.5">
-                                    <div class="rating">
-                                        <div class="rating-label checked">
-                                            <i class="rating-on ki-solid ki-star text-base leading-none"></i>
-                                            <i class="rating-off ki-outline ki-star text-base leading-none"></i>
-                                        </div>
-                                        <div class="rating-label checked">
-                                            <i class="rating-on ki-solid ki-star text-base leading-none"></i>
-                                            <i class="rating-off ki-outline ki-star text-base leading-none"></i>
-                                        </div>
-                                        <div class="rating-label checked">
-                                            <i class="rating-on ki-solid ki-star text-base leading-none"></i>
-                                            <i class="rating-off ki-outline ki-star text-base leading-none"></i>
-                                        </div>
-                                        <div class="rating-label checked">
-                                            <i class="rating-on ki-solid ki-star text-base leading-none"></i>
-                                            <i class="rating-off ki-outline ki-star text-base leading-none"></i>
-                                        </div>
-                                        <div class="rating-label checked">
-                                            <i class="rating-on ki-solid ki-star text-base leading-none"></i>
-                                            <i class="rating-off ki-outline ki-star text-base leading-none"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+        </div>
+    </div>
+</div>
+
+<template id="search-result-template">
+    <div class="menu-item">
+        <div class="menu-link flex justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <img alt="Cover" class="rounded-full size-9 shrink-0 book-cover" src="" />
+                <div class="flex flex-col">
+                    <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px book-title" href="#"></a>
+                    <span class="text-2sm font-normal text-gray-500 book-description"></span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <div class="rating">
+                    <div class="rating-label">
+                        <i class="rating-on ki-solid ki-star text-base leading-none"></i>
+                        <i class="rating-off ki-outline ki-star text-base leading-none"></i>
+                    </div>
+                    <div class="rating-label">
+                        <i class="rating-on ki-solid ki-star text-base leading-none"></i>
+                        <i class="rating-off ki-outline ki-star text-base leading-none"></i>
+                    </div>
+                    <div class="rating-label">
+                        <i class="rating-on ki-solid ki-star text-base leading-none"></i>
+                        <i class="rating-off ki-outline ki-star text-base leading-none"></i>
+                    </div>
+                    <div class="rating-label">
+                        <i class="rating-on ki-solid ki-star text-base leading-none"></i>
+                        <i class="rating-off ki-outline ki-star text-base leading-none"></i>
+                    </div>
+                    <div class="rating-label">
+                        <i class="rating-on ki-solid ki-star text-base leading-none"></i>
+                        <i class="rating-off ki-outline ki-star text-base leading-none"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</template>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('#search_modal input[name="query"]');
+        const modalBody = document.querySelector('#search_modal .modal-body');
+
+        searchInput.addEventListener('click', function() {
+            const query = searchInput.value;
+            performSearch(query);
+        });
+
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value;
+            console.log(query);
+            performSearch(query);
+        });
+
+        function performSearch(query) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/search?query=${query}`, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const results = JSON.parse(xhr.responseText);
+                    if (results.length === 0) {
+                        modalBody.innerHTML = '<div class="text-center text-gray-500 py-5">Aucun résultat trouvé</div>';
+                        return;
+                    }
+                    displayResults(results);
+                }
+            };
+            xhr.send();
+        }
+
+        function displayResults(results) {
+            console.log(results);
+            modalBody.innerHTML = '';
+            const resultsContainer = document.createElement('div');
+            resultsContainer.classList.add('scrollable-y-auto');
+            resultsContainer.setAttribute('data-scrollable', 'true');
+            resultsContainer.setAttribute('data-scrollable-max-height', 'auto');
+            resultsContainer.setAttribute('data-scrollable-offset', '300px');
+
+            const menu = document.createElement('div');
+            menu.classList.add('menu', 'menu-default', 'p-0', 'flex-col');
+
+            results.forEach(result => {
+                const template = document.querySelector('#search-result-template').content.cloneNode(true);
+                template.querySelector('.book-title').textContent = result.name;
+                template.querySelector('.book-description').textContent = result.description;
+
+                const ratingLabels = template.querySelectorAll('.rating-label');
+                ratingLabels.forEach((label, index) => {
+                    if (index < result.avgRating) {
+                        label.classList.add('checked');
+                    } else {
+                        label.classList.remove('checked');
+                    }
+                });
+
+                menu.appendChild(template);
+            });
+
+            resultsContainer.appendChild(menu);
+            modalBody.appendChild(resultsContainer);
+        }
+    });
+</script>
