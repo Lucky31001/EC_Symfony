@@ -1,3 +1,16 @@
+document.addEventListener('DOMContentLoaded', function() {
+
+    document.querySelectorAll('.like-button').forEach(button => {
+        const activityId = button.getAttribute('data-activity-id');
+        console.log(activityId);
+        // if (likedActivities.includes(parseInt(activityId))) {
+        //     const heartIcon = button.querySelector('.heart-icon');
+        //     heartIcon.classList.add('text-red-500', 'ki-solid');
+        //     heartIcon.classList.remove('text-gray-500', 'ki-outline');
+        // }
+    });
+});
+
 document.querySelectorAll('.like-button').forEach(button => {
     button.addEventListener('click', function(event) {
         event.preventDefault();
@@ -10,9 +23,11 @@ document.querySelectorAll('.like-button').forEach(button => {
 
         const activityId = this.getAttribute('data-activity-id');
 
-        console.log(`Like button clicked for activity with ID ${activityId}`);
+        jsonData = { activityId: activityId };
+        console.log(jsonData);
+
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', `/like/${activityId}`, true);
+        xhr.open('POST', `/like`, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function() {
@@ -28,6 +43,6 @@ document.querySelectorAll('.like-button').forEach(button => {
             console.error('Request failed');
         };
 
-        xhr.send(JSON.stringify({ activityId: activityId }));
+        xhr.send(JSON.stringify(jsonData));
     });
 });

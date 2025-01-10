@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BookRead;
 use App\Repository\BookReadRepository;
-use App\Repository\LikeRepository;
+use App\Repository\BookRepository;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BookController extends AbstractController
 {
-    public function __construct(private LikeRepository $bookRepository,
+    public function __construct(private BookRepository $bookRepository,
         private UserRepository $userRepository,
         private Security $security,
         private BookReadRepository $bookReadRepository,

@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Like;
 use App\Repository\BookReadRepository;
 use App\Repository\LikeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LikeController extends AbstractController
@@ -18,10 +20,12 @@ class LikeController extends AbstractController
     ) {
     }
 
-    #[Route('/like/{id}', name: 'like_activity', methods: ['POST'])]
-    public function likeActivity(int $id): JsonResponse
+    #[Route('/like', name: 'like_activity', methods: ['POST'])]
+    public function likeActivity(Request $request): JsonResponse
     {
         $user = $this->security->getUser();
+
+        $id = json_decode($request->getContent(), true)['activityId'];
 
         $bookread = $this->bookReadRepository->find($id);
 
@@ -29,18 +33,25 @@ class LikeController extends AbstractController
             return new JsonResponse(['message' => 'Bookread not found'], 404);
         }
 
-        $like = $this->likeRepository->findAll();
+        $like = $this->likeRepository->findOneBy(['user' => $user, 'book_read' => $bookread]);
 
-        //        if (!$like) {
-        //            $like = new Like();
-        //            $like->setUser($user);
-        //            $like->setBookRead($bookread);
-        //
-        //            $this->likeRepository->save($like);
-        //        } else {
-        //            $this->likeRepository->changeLikeStatus($like);
-        //        }
+        if (! $like) {
+            $like = new Like();
+            $like->setUser($user);
+            $like->setBookRead($bookread);
+            $like->setLike(true);
 
-        return new JsonResponse(['message' => $this->likeRepository->findAll()], 200);
+            try {
+                $this->likeRepository->save($like);
+            } catch (\Exception $e) {
+                return new JsonResponse(['message' => 'Error while saving like'], 500);
+            }
+        } else {
+            $this->likeRepository->invertLike($like);
+
+            return new JsonResponse(['message' => 'Already liked'], 200);
+        }
+
+        return new JsonResponse(['message' => $like], 200);
     }
 }

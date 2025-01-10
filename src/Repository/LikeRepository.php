@@ -4,57 +4,54 @@ namespace App\Repository;
 
 use App\Entity\Like;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Book>
- */
-
-/**
- * @method Like|null find($id, $lockMode = null, $lockVersion = null)
- * @method Like|null findOneBy(array $criteria, array $orderBy = null)
- * @method Like[]    findAll()
- * @method Like[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Like>
  */
 class LikeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Like::class);
+        $this->entityManager = $entityManager;
     }
 
     public function save(Like $like): void
     {
-        $this->getEntityManager()->persist($like);
-        $this->getEntityManager()->flush();
+        $this->entityManager->persist($like);
+        $this->entityManager->flush();
     }
 
-    public function changeLikeStatus(Like $like): void
+    public function invertLike(Like $like): void
     {
-        $like->setIsLike(! $like->getIsLike());
-        $this->getEntityManager()->persist($like);
-        $this->getEntityManager()->flush();
-    }
+        $like->setLike(! $like->IsLike());
 
+        $this->entityManager->persist($like);
+        $this->entityManager->flush();
+    }
     //    /**
-    //     * @return Book[] Returns an array of Book objects
+    //     * @return Like[] Returns an array of Like objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
+    //            ->orderBy('l.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Book
+    //    public function findOneBySomeField($value): ?Like
     //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

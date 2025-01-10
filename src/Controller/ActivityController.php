@@ -16,8 +16,8 @@ class ActivityController extends AbstractController
         private Security $security,
         private UserRepository $userRepository,
         private BookRepository $bookRepository,
-        private LikeRepository $likeRepository)
-    {
+        private LikeRepository $likeRepository,
+    ) {
     }
 
     #[Route('/activity', name: 'app_activity')]
@@ -32,11 +32,11 @@ class ActivityController extends AbstractController
 
         $bookread = $this->bookReadRepository->findAllDetailsByNotUserId($user);
 
-        $like = $this->likeRepository->findAll();
+        $likes = $this->likeRepository->findBy(['user' => $user]);
 
-        //        dd($like);
         return $this->render('pages/activity.html.twig', [
             'activities' => $bookread,
+            'likes' => json_encode($likes),
             'name' => 'Activités',
         ]);
     }
