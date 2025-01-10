@@ -5,8 +5,28 @@
         </h3>
     </div>
     <div class="card-body flex flex-col gap-5">
-        <figure>
-            <img src="{{  asset('media/charts/Radar_Sample.png') }}" alt="Radar Sample"/>
-        </figure>
+        <div id="radar-chart"></div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+    var data = {{ radarData|raw }};
+    const count = data.map((item) => (item.book_count));
+    const categories = data.map((item) => (item.categoryName));
+    var options = {
+        series: [{
+            name: 'Series 1',
+            data: count,
+        }],
+        chart: {
+            height: 350,
+            type: 'radar',
+        },
+        title: {
+            text: 'Nombre de livre lu par catégorie'
+        },
+        yaxis: {
+            stepSize: 0.5,
+            max: 5.0

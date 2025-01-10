@@ -37,10 +37,13 @@ class HomeController extends AbstractController
         $booksReading = $this->bookReadRepository->findAllByUserId($user, false);
         $books = $this->bookRepository->findAll();
 
+        $radarData = [];
+
         return $this->render('pages/home.html.twig', [
             'books'     => $books,
             'booksRead' => $booksRead,
             'booksReading' => $booksReading,
+            'radarData' => json_encode($radarData),
             'name'      => 'Accueil',
             'user'      => $user->getUserIdentifier()
         ]);
