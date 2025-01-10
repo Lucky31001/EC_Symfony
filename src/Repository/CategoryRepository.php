@@ -40,4 +40,23 @@ class CategoryRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function getCategoriesWithBookReadCountByUserId(int $userId): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+        SELECT c.id AS category_id, c.name AS category_name, COUNT(br.id) AS book_read_count
+        FROM category c
+        LEFT JOIN book_category bc ON bc.category_id = c.id
+        LEFT JOIN book b ON b.id = bc.book_id 
+        LEFT JOIN book_read br ON br.book_id = b.id AND br.user_id = :userId AND br.is_read = true
+        GROUP BY c.id, c.name
+    ';
+
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery(['userId' => $userId]);
+
+        return $resultSet->fetchAllAssociative();
+    }
 }

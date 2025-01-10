@@ -61,6 +61,23 @@ class BookController extends AbstractController
             $this->logger->error('Database error: ' . $e->getMessage());
             return new JsonResponse(['message' => 'Database error'], 500);
         }
+
+        $category = $book->getCategory()->getValues();
+
+        $category = array_map(function ($category) {
+            return $category->getName();
+        }, $category);
+
+        $bookRead = [
+            'id' => $bookRead->getId(),
+            'book' => $bookRead->getBook()->getName(),
+            'rating' => $bookRead->getRating(),
+            'is_read' => $bookRead->isRead(),
+            'category' => $category[0],
+            'description' => $bookRead->getDescription(),
+            'updated_at' => (new DateTime())->format('Y-m-d H:i:s'),
+        ];
+
         return $this->json([
             'message' => 'Book read saved successfully',
             'bookRead' => $bookRead

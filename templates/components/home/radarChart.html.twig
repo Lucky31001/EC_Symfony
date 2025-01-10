@@ -13,20 +13,77 @@
 
 <script>
     var data = {{ radarData|raw }};
-    const count = data.map((item) => (item.book_count));
-    const categories = data.map((item) => (item.categoryName));
+    const count = data.map((item) => (item.book_read_count));
+    const categories = data.map((item) => (item.category_name));
+    console.log(count);
+    console.log(categories);
     var options = {
         series: [{
-            name: 'Series 1',
+            name: 'Nombre de livre lu',
             data: count,
         }],
         chart: {
             height: 350,
             type: 'radar',
         },
+        dataLabels: {
+            enabled: true
+        },
+        plotOptions: {
+            radar: {
+                size: 100,
+                polygons: {
+                    strokeColors: '#e9e9e9',
+                    fill: {
+                        colors: ['#f8f8f8', '#fff']
+                    }
+                }
+            }
+        },
         title: {
             text: 'Nombre de livre lu par catégorie'
         },
+        colors: ['#FF4560'],
+        markers: {
+            size: 4,
+            colors: ['#fff'],
+            strokeColor: '#FF4560',
+            strokeWidth: 2,
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val
+                }
+            }
+        },
         yaxis: {
-            stepSize: 0.5,
-            max: 5.0
+            labels: {
+                formatter: function(val, i) {
+                    if (i % 2 === 0) {
+                        return val
+                    } else {
+                        return ''
+                    }
+                }
+            }
+        },
+        xaxis: {
+            categories: categories
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#radar-chart"), options);
+    chart.render();
+
+    function updateChart(category) {
+        const index = categories.indexOf(category);
+        if (index !== -1) {
+            count[index] += 1;
+            chart.updateSeries([{
+                name: 'Series 1',
+                data: count,
+            }]);
+        }
+    }
+</script>
