@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.like-button').forEach(button => {
+        console.log(button);
+        const heartIcon = button.querySelector('.heart-icon');
+        heartIcon.classList.add('text-gray-500', 'ki-outline');
+        heartIcon.classList.remove('text-red-500', 'ki-solid');
+    });
+
+    document.querySelectorAll('.like-button').forEach(button => {
         const activityId = button.getAttribute('data-activity-id');
         if (likes.includes(parseInt(activityId))) {
             const heartIcon = button.querySelector('.heart-icon');

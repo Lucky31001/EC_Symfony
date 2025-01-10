@@ -32,7 +32,7 @@ class ActivityController extends AbstractController
 
         $bookread = $this->bookReadRepository->findAllDetailsByNotUserId($user);
 
-        $likes = $this->likeRepository->findBy(['user' => $user]);
+        $likes = $this->likeRepository->findBy(['user' => $user, 'is_like' => true]);
         $booksReadIds = [];
 
         foreach ($likes as $like) {
