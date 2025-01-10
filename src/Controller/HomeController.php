@@ -16,11 +16,11 @@ class HomeController extends AbstractController
     private BookReadRepository $readBookRepository;
 
     // Inject the repository via the constructor
-    public function __construct(private BookReadRepository          $bookReadRepository,
-                                private Security                    $security,
-                                private BookRepository              $bookRepository,
-                                private UserRepository              $userRepository,
-                                private readonly CategoryRepository $categoryRepository)
+    public function __construct(private BookReadRepository $bookReadRepository,
+        private Security $security,
+        private BookRepository $bookRepository,
+        private UserRepository $userRepository,
+        private readonly CategoryRepository $categoryRepository)
     {
     }
 
@@ -28,26 +28,26 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         $user = $this->security->getUser();
-        if (!$user) {
+        if (! $user) {
             return $this->redirectToRoute('app_login');
         }
-        $userId     = $user->getId();
+        $userId = $user->getId();
         $user = $this->userRepository->find($userId);
 
-        $booksRead  = $this->bookReadRepository->findAllDetailsByUserId($user);
+        $booksRead = $this->bookReadRepository->findAllDetailsByUserId($user);
         $booksReading = $this->bookReadRepository->findAllByUserId($user, false);
         $books = $this->bookRepository->findAll();
 
-//        dd($booksRead, $booksReading);
+        //        dd($booksRead, $booksReading);
         $radarData = $this->categoryRepository->getCategoriesWithBookReadCountByUserId($userId);
 
         return $this->render('pages/home.html.twig', [
-            'books'     => $books,
+            'books' => $books,
             'booksRead' => $booksRead,
             'booksReading' => $booksReading,
             'radarData' => json_encode($radarData),
-            'name'      => 'Accueil',
-            'user'      => $user->getUserIdentifier()
+            'name' => 'Accueil',
+            'user' => $user->getUserIdentifier(),
         ]);
     }
 }

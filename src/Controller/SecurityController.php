@@ -11,10 +11,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-
     public function __construct(private Security $security)
     {
     }
+
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -32,6 +32,7 @@ class SecurityController extends AbstractController
     public function logout(): RedirectResponse
     {
         $this->security->logout();
+
         return $this->redirectToRoute('app_login');
     }
 }

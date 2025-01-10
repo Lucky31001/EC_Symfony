@@ -15,10 +15,10 @@ class BookReadFixture extends Fixture implements DependentFixtureInterface
     {
         $now = new \DateTime();
 
-        for ($enum = 0; $enum < 10; $enum++) {
+        for ($enum = 0; $enum < 10; ++$enum) {
             $bookread = new BookRead();
-            $bookread->setBook($this->getReference('book_' . rand(0, 9), Book::class));
-            $bookread->setUser($this->getReference('user_' . rand(0, 1), User::class));
+            $bookread->setBook($this->getReference('book_'.rand(0, 9), Book::class));
+            $bookread->setUser($this->getReference('user_'.rand(0, 1), User::class));
             $bookread->setRating(rand(0, 5));
             $bookread->setDescription('Description de lecture');
             $bookread->setRead(rand(0, 1));
@@ -38,7 +38,4 @@ class BookReadFixture extends Fixture implements DependentFixtureInterface
             UserFixture::class,
         ];
     }
-}
-{
-
 }

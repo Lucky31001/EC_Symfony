@@ -3,10 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BookReadRepository;
-use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: BookReadRepository::class)]
 class BookRead
@@ -36,10 +34,10 @@ class BookRead
     private ?string $cover = null;
 
     #[ORM\Column]
-    private ?DateTime $created_at = null;
+    private ?\DateTime $created_at = null;
 
     #[ORM\Column]
-    private ?DateTime $updated_at = null;
+    private ?\DateTime $updated_at = null;
 
     public function getId(): ?int
     {
@@ -118,24 +116,24 @@ class BookRead
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(DateTime $created_at): static
+    public function setCreatedAt(\DateTime $created_at): static
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(DateTime $updated_at): static
+    public function setUpdatedAt(\DateTime $updated_at): static
     {
         $this->updated_at = $updated_at;
 

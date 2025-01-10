@@ -6,22 +6,21 @@ use App\Entity\BookRead;
 use App\Repository\BookReadRepository;
 use App\Repository\LikeRepository;
 use App\Repository\UserRepository;
-use DateTime;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Psr\Log\LoggerInterface;
 
 class BookController extends AbstractController
 {
-    public function __construct(private LikeRepository     $bookRepository,
-                                private UserRepository     $userRepository,
-                                private Security           $security,
-                                private BookReadRepository $bookReadRepository,
-                                private LoggerInterface    $logger,)
+    public function __construct(private LikeRepository $bookRepository,
+        private UserRepository $userRepository,
+        private Security $security,
+        private BookReadRepository $bookReadRepository,
+        private LoggerInterface $logger, )
     {
     }
 
@@ -39,8 +38,9 @@ class BookController extends AbstractController
 
         $book = $this->bookRepository->find($bookId);
 
-        if (!$book) {
+        if (! $book) {
             $this->logger->error('Book not found');
+
             return new JsonResponse(['message' => 'Book not found'], 404);
         }
 
@@ -50,12 +50,12 @@ class BookController extends AbstractController
 
         $asChangeRead = false;
         $gonnaUpdate = false;
-        if (!$bookRead) {
+        if (! $bookRead) {
             $gonnaUpdate = true;
             $bookRead = new BookRead();
             $bookRead->setUser($user);
             $bookRead->setBook($book);
-            $bookRead->setCreatedAt(new DateTime());
+            $bookRead->setCreatedAt(new \DateTime());
         } elseif ($bookRead->isRead() !== $isRead) {
             $asChangeRead = true;
         }
@@ -63,12 +63,13 @@ class BookController extends AbstractController
         $bookRead->setRating($rating);
         $bookRead->setDescription($description);
         $bookRead->setRead($isRead);
-        $bookRead->setUpdatedAt(new DateTime());
+        $bookRead->setUpdatedAt(new \DateTime());
 
         try {
             $this->bookReadRepository->save($bookRead);
         } catch (\Exception $e) {
-            $this->logger->error('Database error: ' . $e->getMessage());
+            $this->logger->error('Database error: '.$e->getMessage());
+
             return new JsonResponse(['message' => 'Database error'], 500);
         }
 
@@ -85,14 +86,14 @@ class BookController extends AbstractController
             'is_read' => $bookRead->isRead(),
             'category' => $category[0],
             'description' => $book->getDescription(),
-            'updated_at' => (new DateTime())->format('Y-m-d H:i:s'),
+            'updated_at' => (new \DateTime())->format('Y-m-d H:i:s'),
         ];
 
         return $this->json([
             'message' => 'Book read saved successfully',
             'methode' => $gonnaUpdate ? 'create' : 'update',
             'as_change_read' => $asChangeRead,
-            'bookRead' => $bookRead
+            'bookRead' => $bookRead,
         ], Response::HTTP_CREATED);
     }
 }

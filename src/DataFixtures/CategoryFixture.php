@@ -2,10 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\Category;
 
 class CategoryFixture extends Fixture implements DependentFixtureInterface
 {
@@ -13,15 +13,15 @@ class CategoryFixture extends Fixture implements DependentFixtureInterface
     {
         $now = new \DateTime();
 
-        for ($enum = 0; $enum < 10; $enum++) {
+        for ($enum = 0; $enum < 10; ++$enum) {
             $category = new Category();
-            $category->setName('Category ' . $enum);
-            $category->setDescription('Description ' . $enum);
+            $category->setName('Category '.$enum);
+            $category->setDescription('Description '.$enum);
             $category->setCreatedAt($now);
             $category->setUpdatedAt($now);
 
             $manager->persist($category);
-            $this->addReference('category_' . $enum, $category);
+            $this->addReference('category_'.$enum, $category);
         }
 
         $manager->flush();

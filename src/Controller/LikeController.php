@@ -14,9 +14,8 @@ class LikeController extends AbstractController
     public function __construct(
         private BookReadRepository $bookReadRepository,
         private LikeRepository $likeRepository,
-        private Security $security
-    )
-    {
+        private Security $security,
+    ) {
     }
 
     #[Route('/like/{id}', name: 'like_activity', methods: ['POST'])]
@@ -26,21 +25,21 @@ class LikeController extends AbstractController
 
         $bookread = $this->bookReadRepository->find($id);
 
-        if (!$bookread) {
+        if (! $bookread) {
             return new JsonResponse(['message' => 'Bookread not found'], 404);
         }
 
         $like = $this->likeRepository->findAll();
 
-//        if (!$like) {
-//            $like = new Like();
-//            $like->setUser($user);
-//            $like->setBookRead($bookread);
-//
-//            $this->likeRepository->save($like);
-//        } else {
-//            $this->likeRepository->changeLikeStatus($like);
-//        }
+        //        if (!$like) {
+        //            $like = new Like();
+        //            $like->setUser($user);
+        //            $like->setBookRead($bookread);
+        //
+        //            $this->likeRepository->save($like);
+        //        } else {
+        //            $this->likeRepository->changeLikeStatus($like);
+        //        }
 
         return new JsonResponse(['message' => $this->likeRepository->findAll()], 200);
     }

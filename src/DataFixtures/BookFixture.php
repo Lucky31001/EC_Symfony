@@ -2,12 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Book;
 use App\Entity\Category;
-use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\Book;
 
 class BookFixture extends Fixture implements DependentFixtureInterface
 {
@@ -15,17 +14,17 @@ class BookFixture extends Fixture implements DependentFixtureInterface
     {
         $now = new \DateTime();
 
-        for ($enum = 0; $enum < 10; $enum++) {
+        for ($enum = 0; $enum < 10; ++$enum) {
             $book = new Book();
-            $book->addCategory($this->getReference('category_' . rand(0, 9), Category::class));
-            $book->setName('Book ' . $enum);
-            $book->setDescription('Description ' . $enum);
+            $book->addCategory($this->getReference('category_'.rand(0, 9), Category::class));
+            $book->setName('Book '.$enum);
+            $book->setDescription('Description '.$enum);
             $book->setPages(rand(100, 500));
             $book->setPublicationDate(new \DateTime());
             $book->setCreatedAt($now);
             $book->setUpdatedAt($now);
 
-            $this->addReference('book_' . $enum, $book);
+            $this->addReference('book_'.$enum, $book);
             $manager->persist($book);
         }
 
@@ -36,7 +35,7 @@ class BookFixture extends Fixture implements DependentFixtureInterface
     {
         return [
             CategoryFixture::class,
-            UserFixture::class
+            UserFixture::class,
         ];
     }
 }

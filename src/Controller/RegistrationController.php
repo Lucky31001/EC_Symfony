@@ -14,10 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
-
     public function __construct(private Security $security)
     {
     }
+
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -36,6 +36,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             $this->security->login($user);
+
             return $this->redirectToRoute('app.home');
         }
 

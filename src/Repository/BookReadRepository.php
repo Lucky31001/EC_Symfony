@@ -18,7 +18,6 @@ class BookReadRepository extends ServiceEntityRepository
         parent::__construct($registry, BookRead::class);
     }
 
-
     public function findAllDetailsByUserId(User $user): array
     {
         return $this->createQueryBuilder('br')
@@ -64,7 +63,6 @@ class BookReadRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
-
     }
 
     public function save(BookRead $bookRead): void

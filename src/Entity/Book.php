@@ -78,7 +78,7 @@ class Book
 
     public function addCategory(Category $category): static
     {
-        if (!$this->category->contains($category)) {
+        if (! $this->category->contains($category)) {
             $this->category->add($category);
         }
 
