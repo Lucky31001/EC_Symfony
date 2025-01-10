@@ -80,10 +80,15 @@
         const index = categories.indexOf(category);
         if (index !== -1) {
             count[index] += 1;
-            chart.updateSeries([{
-                name: 'Series 1',
-                data: count,
-            }]);
+            chart.destroy();
+            chart = new ApexCharts(document.querySelector("#radar-chart"), {
+                ...options,
+                series: [{
+                    name: 'Nombre de livre lu',
+                    data: count,
+                }]
+            });
+            chart.render();
         }
     }
 </script>

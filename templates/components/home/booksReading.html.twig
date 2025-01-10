@@ -6,7 +6,9 @@
         <div class="input input-sm max-w-48">
             <i class="ki-filled ki-magnifier">
             </i>
-            <input data-datatable-search="#current-books-table" placeholder="Rechercher" type="text"/>
+            <label>
+                <input data-datatable-search="#current-books-table" placeholder="Rechercher" value="" type="text"/>
+            </label>
         </div>
     </div>
     <div class="card-body">
@@ -34,17 +36,18 @@
                         <tr>
                             <td>
                                 <div class="flex flex-col gap-2">
-                                    <a class="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-                                       href="#">
-                                        {{ booksReading[0].bookName }}
+                                    <a class="leading-none font-medium text-sm text-gray-900 hover:text-primary" data-modal-toggle="#book_modal"
+                                       href="#"
+                                        data-id="{{ bookReading.ID }}">
+                                        {{ bookReading.bookName }}
                                     </a>
                                     <span class="text-2sm text-gray-700 font-normal leading-3">
-                                        {{ booksReading[0].description }}
+                                        {{ bookReading.description }}
                                 </span>
                                 </div>
                             </td>
                             <td class="text-end">
-                                {{ booksReading[0].updatedAt|date('d/m/Y à H:i') }}
+                                {{ bookReading.updatedAt|date('d/m/Y à H:i') }}
                             </td>
                         </tr>
                     {% endfor %}
