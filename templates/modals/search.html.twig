@@ -78,7 +78,7 @@
                         modalBody.innerHTML = '<div class="text-center text-gray-500 py-5">Aucun résultat trouvé</div>';
                         return;
                     }
-                    displayResults(results);
+                    displayResults(results.slice(0, 7));
                 }
             };
             xhr.send();
