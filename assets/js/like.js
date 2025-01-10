@@ -1,13 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-
     document.querySelectorAll('.like-button').forEach(button => {
         const activityId = button.getAttribute('data-activity-id');
-        console.log(activityId);
-        // if (likedActivities.includes(parseInt(activityId))) {
-        //     const heartIcon = button.querySelector('.heart-icon');
-        //     heartIcon.classList.add('text-red-500', 'ki-solid');
-        //     heartIcon.classList.remove('text-gray-500', 'ki-outline');
-        // }
+        if (likes.includes(parseInt(activityId))) {
+            const heartIcon = button.querySelector('.heart-icon');
+            heartIcon.classList.add('text-red-500', 'ki-solid');
+            heartIcon.classList.remove('text-gray-500', 'ki-outline');
+        }
     });
 });
 

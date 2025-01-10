@@ -46,5 +46,8 @@
             </div>
         {% endif %}
     </div>
+    <script>
+        let likes = {{ likes|json_encode|raw }};
+    </script>
     <script src="{{ asset('js/like.js') }}"></script>
 {% endblock %}

@@ -33,10 +33,15 @@ class ActivityController extends AbstractController
         $bookread = $this->bookReadRepository->findAllDetailsByNotUserId($user);
 
         $likes = $this->likeRepository->findBy(['user' => $user]);
+        $booksReadIds = [];
+
+        foreach ($likes as $like) {
+            $booksReadIds[] = $like->getBookRead()->getId();
+        }
 
         return $this->render('pages/activity.html.twig', [
             'activities' => $bookread,
-            'likes' => json_encode($likes),
+            'likes' => $booksReadIds,
             'name' => 'Activités',
         ]);
     }
