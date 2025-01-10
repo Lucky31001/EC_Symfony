@@ -57,21 +57,25 @@
                             </td>
                             <td>{{ book.categoryName }}</td>
                             <td>
-                                <div class="rating">
-                                    {% set fullStars = book.rating|round(0, 'ceil') %}
+                                <div class="rating flex items-center mb-4">
+                                    {% set fullStars = book.rating %}
                                     {% set emptyStars = 5 - fullStars %}
 
-                                    {% for i in 1..fullStars %}
-                                        <div class="rating-label checked">
-                                            <i class="rating-on ki-solid ki-star text-base leading-none"></i>
-                                        </div>
-                                    {% endfor %}
+                                    {% if fullStars > 0 %}
+                                        {% for i in range(1, fullStars) %}
+                                            <div class="rating-label checked">
+                                                <i class="rating-on ki-solid ki-star text-yellow-500"></i>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
 
-                                    {% for i in 1..emptyStars %}
-                                        <div class="rating-label">
-                                            <i class="rating-off ki-outline ki-star text-base leading-none"></i>
-                                        </div>
-                                    {% endfor %}
+                                    {% if emptyStars > 0 %}
+                                        {% for i in range(1, emptyStars) %}
+                                            <div class="rating-label">
+                                                <i class="rating-off ki-outline ki-star text-gray-300"></i>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>

@@ -24,7 +24,7 @@ class LikeRepository extends ServiceEntityRepository
         return $like;
     }
 
-    public function changeLikrStatus(Like $like): Like
+    public function changeLikeStatus(Like $like): Like
     {
         $like->
         $this->_em->persist($like);
