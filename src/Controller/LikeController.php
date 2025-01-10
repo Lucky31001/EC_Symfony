@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Like;
 use App\Repository\BookReadRepository;
 use App\Repository\LikeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,18 +30,18 @@ class LikeController extends AbstractController
             return new JsonResponse(['message' => 'Bookread not found'], 404);
         }
 
-        $like = $this->likeRepository->findOneBy(['user' => $user, 'bookread' => $bookread]);
+        $like = $this->likeRepository->findAll();
 
-        if (!$like) {
-            $like = new Like();
-            $like->setUser($user);
-            $like->setBookRead($bookread);
+//        if (!$like) {
+//            $like = new Like();
+//            $like->setUser($user);
+//            $like->setBookRead($bookread);
+//
+//            $this->likeRepository->save($like);
+//        } else {
+//            $this->likeRepository->changeLikeStatus($like);
+//        }
 
-            $this->likeRepository->save($like);
-        } else {
-            $this->likeRepository->changeLikeStatus($like);
-        }
-
-        return new JsonResponse(['message' => 'Like add !'], 200);
+        return new JsonResponse(['message' => $this->likeRepository->findAll()], 200);
     }
 }

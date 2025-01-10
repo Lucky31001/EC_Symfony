@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\BookReadRepository;
 use App\Repository\BookRepository;
+use App\Repository\LikeRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -13,9 +14,10 @@ class ActivityController extends AbstractController
 {
 
     public function __construct(private BookReadRepository $bookReadRepository,
-                                private Security $security,
-                                private UserRepository $userRepository,
-                                private BookRepository $bookRepository)
+                                private Security           $security,
+                                private UserRepository     $userRepository,
+                                private BookRepository     $bookRepository,
+                                private LikeRepository     $likeRepository)
     {
     }
 
@@ -31,7 +33,8 @@ class ActivityController extends AbstractController
 
         $bookread = $this->bookReadRepository->findAllDetailsByNotUserId($user);
 
-//        dd($bookread);
+        $like = $this->likeRepository->findAll();
+//        dd($like);
         return $this->render('pages/activity.html.twig', [
             'activities' => $bookread,
             'name'       => 'Activités'

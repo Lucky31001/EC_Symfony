@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BookRead;
 use App\Repository\BookReadRepository;
-use App\Repository\BookRepository;
+use App\Repository\LikeRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,11 +17,11 @@ use Psr\Log\LoggerInterface;
 
 class BookController extends AbstractController
 {
-    public function __construct(private BookRepository $bookRepository,
-                                private UserRepository $userRepository,
-                                private Security $security,
+    public function __construct(private LikeRepository     $bookRepository,
+                                private UserRepository     $userRepository,
+                                private Security           $security,
                                 private BookReadRepository $bookReadRepository,
-                                private LoggerInterface $logger,)
+                                private LoggerInterface    $logger,)
     {
     }
 

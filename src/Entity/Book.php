@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\BookRepository;
+use App\Repository\LikeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BookRepository::class)]
+#[ORM\Entity(repositoryClass: LikeRepository::class)]
 class Book
 {
     #[ORM\Id]
