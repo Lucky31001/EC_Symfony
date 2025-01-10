@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             `;
 
                                 tableBody.appendChild(newRow);
+                                updateChart(bookRead.category);
                             } else {
                                 booksReading.push(bookRead);
                                 const tableBody = document.querySelector('#current-books-table tbody');
@@ -163,6 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             `;
 
                                 tableBody.appendChild(newRow);
+                                removeChart(bookRead.category);
                             }
                         }
                     }
