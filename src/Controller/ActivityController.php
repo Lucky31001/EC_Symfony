@@ -29,10 +29,9 @@ class ActivityController extends AbstractController
         $userId     = $user->getId();
         $user = $this->userRepository->find($userId);
 
-        $books = $this->bookRepository->findAll();
-
         $bookread = $this->bookReadRepository->findAllDetailsByNotUserId($user);
 
+//        dd($bookread);
         return $this->render('pages/activity.html.twig', [
             'activities' => $bookread,
             'name'       => 'Activités'

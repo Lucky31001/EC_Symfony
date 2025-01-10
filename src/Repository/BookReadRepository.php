@@ -35,7 +35,15 @@ class BookReadRepository extends ServiceEntityRepository
     public function findAllDetailsByNotUserId(User $user): array
     {
         return $this->createQueryBuilder('br')
-            ->select('br.id AS ID, b.name AS bookName, b.description, br.is_read, c.name AS categoryName, br.rating')
+            ->select('br.id AS ID,
+            b.name AS bookName,
+            b.description as bookDescription,
+            br.is_read,
+            c.name AS categoryName,
+            br.rating,
+            br.created_at as createdAt,
+            u.email as userEmail')
+            ->join('br.user', 'u')
             ->join('br.book', 'b')
             ->join('b.category', 'c')
             ->where('br.user != :user')

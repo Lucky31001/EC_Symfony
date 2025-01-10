@@ -5,7 +5,41 @@
 {% endblock %}
 
 {% block body %}
-    {% for activity in activities %}
-    {{ activity.bookName }}
-    {% endfor %}
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">My Activities</h1>
+        {% if activities is empty %}
+            <p class="text-gray-700">No activities found.</p>
+        {% else %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for activity in activities %}
+                    <div class="card bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <div class="card-body p-6">
+                            <h2 class="text-2xl font-semibold mb-4">{{ activity.bookName }}</h2>
+                            <p class="text-gray-700 mb-4">{{ activity.bookDescription }}</p>
+                            <div class="rating flex items-center mb-4">
+                                {% set fullStars = activity.rating|round(0, 'ceil') %}
+                                {% set emptyStars = 5 - fullStars %}
+
+                                {% for i in 1..fullStars %}
+                                    <div class="rating-label checked">
+                                        <i class="rating-on ki-solid ki-star text-yellow-500"></i>
+                                    </div>
+                                {% endfor %}
+
+                                {% if emptyStars %}
+                                    {% for i in 1..emptyStars %}
+                                        <div class="rating-label">
+                                            <i class="rating-off ki-outline ki-star text-gray-300"></i>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <p class="text-gray-700 mb-2">User: {{ activity.userEmail }}</p>
+                            <p class="text-gray-500 text-sm">Read on: {{ activity.createdAt|date('d M Y') }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -40,7 +40,7 @@ class HomeController extends AbstractController
         $booksReading = $this->bookReadRepository->findAllByUserId($user, false);
         $books = $this->bookRepository->findAll();
 
-//        dd($booksRead, $booksReading, $books);
+//        dd($booksRead, $booksReading);
         $radarData = $this->categoryRepository->getCategoriesWithBookReadCountByUserId($userId);
 
         return $this->render('pages/home.html.twig', [
