@@ -2,6 +2,7 @@
 PHP=php
 DOCTRINE=php bin/console doctrine
 SYMFONY_SERVER=symfony server:start --daemon
+STOP_SYMFONY_SERVER=symfony server:stop
 SYNFONY_SERVER_STATUS=symfony server:status
 XAMPP_CMD=sudo /Applications/XAMPP/xamppfiles/xampp
 COMPOSER=composer
@@ -40,9 +41,14 @@ fixtures:
 	$(DOCTRINE):fixtures:load --no-interaction
 
 # Commande pour démarrer le serveur Symfony
-start-server:
+start:
 	@echo "Démarrage du serveur Symfony..."
 	$(SYMFONY_SERVER)
+
+# Commande pour arrêter le serveur Symfony
+stop:
+	@echo "Arrêt du serveur Symfony..."
+	$(STOP_SYMFONY_SERVER)
 
 # Commande pour créer une nouvelle migration basée sur les changements dans les entités
 migration:
@@ -55,4 +61,4 @@ migrate:
 	$(DOCTRINE):migrations:migrate --no-interaction
 
 # Commande combinée pour lancer XAMPP, créer la base de données, créer les tables, injecter les fixtures et démarrer le serveur Symfony
-run: start-xampp install-composer-deps drop-db create-db migrate-db fixtures start-server
+run: start-xampp install-composer-deps drop-db create-db migrate-db fixtures start

@@ -17,7 +17,7 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants sur votre
 ### 1. Installer les dépendances
 
 ```bash
-composer install
+make install-composer-deps
 ```
 
 ### 2. Configurer l'environnement
@@ -37,13 +37,36 @@ DATABASE_URL="mysql://root:mot_de_pase@127.0.0.1:3307/nom_de_votre_base_de_donne
 Si vous n'avez pas encore cloné le projet, commencez par le faire via Git :
 
 ```bash
-php bin/console doctrine:database:create
-php bin/console make:migration
-php bin/console doctrine:migrations:migrate
+make drop-db
+make create-db
+make migrate-db
+make fixtures
 ```
 
 ### 4. Démarrer le serveur Symfony
 
 ```bash
-php bin/console server:run
+make start
 ```
+
+### 5. Accéder à l'application
+
+Ouvrez votre navigateur et accédez à l'URL suivante : [http://localhost:8000](http://localhost:8000)
+
+## Commandes utiles
+
+- **Démarrer le serveur Symfony** : `make start`
+- **Arrêter le serveur Symfony** : `make stop`
+- **Créer une nouvelle migration** : `make migration`
+- **Exécuter les migrations** : `make migrate`
+
+## Documentation
+
+- Des utiliseur de test existent déja dans la base de données :
+
+  - **Utilisateur avec des Bookread** : email: `test2@test.test`, mot de passe: `Azerty123`
+  - **Utilisateur sans Bookread** : email: `test@test.test`, mot de passe: `Azerty123`
+
+Pour information, les stories 1/2/4/6/7 et 8 sont fonctionnelles.
+la stories 3 marche en sélectionnant de nouveaux un livre déja enregistrer (voir BookController::saveBookRead).
+la stories 5 implémente bien le systeme de like mais pas de commentaire.

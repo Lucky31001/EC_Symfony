@@ -15,7 +15,7 @@ class BookReadFixture extends Fixture implements DependentFixtureInterface
     {
         $now = new \DateTime();
 
-        for ($enum = 0; $enum < 10; ++$enum) {
+        for ($enum = 0; $enum < 5; ++$enum) {
             $bookread = new BookRead();
             $bookread->setBook($this->getReference('book_'.$enum, Book::class));
             $bookread->setUser($this->getReference('user_1', User::class));
